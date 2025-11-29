@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import '../app/carousel.css'
 
@@ -72,10 +73,13 @@ export default function Carousel() {
                         key={slide.id}
                         className={`carousel-slide ${index === currentSlide ? 'active' : ''}`}
                     >
-                        <img
+                        <Image
                             src={slide.src}
                             alt={slide.alt}
+                            fill
+                            className="object-cover object-center"
                             loading={index === 0 ? 'eager' : 'lazy'}
+                            unoptimized
                         />
                     </div>
                 ))}

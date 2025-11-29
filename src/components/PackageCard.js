@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function PackageCard({ package: pkg }) {
     // Function to calculate end date (15 days after start date)
@@ -37,10 +38,11 @@ export default function PackageCard({ package: pkg }) {
         <div className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-2 border border-gray-100">
             {/* Image Section */}
             <div className="relative w-full h-56 overflow-hidden">
-                <img
+                <Image
                     src={imageSrc}
                     alt={pkg.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 {/* Location Badge Overlay */}
                 <div className="absolute top-4 left-4 bg-gray-800/80 backdrop-blur-sm text-white text-sm font-semibold px-4 py-2 rounded-full shadow-lg">

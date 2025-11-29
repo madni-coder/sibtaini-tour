@@ -1,5 +1,6 @@
 'use client'
 import { useParams, useRouter } from 'next/navigation'
+import Image from 'next/image'
 import Navbar from '@/components/Navbar'
 
 export default function PackageDetails() {
@@ -134,10 +135,11 @@ export default function PackageDetails() {
                     <div className="grid md:grid-cols-2 gap-0">
                         {/* Image Section */}
                         <div className="relative h-80 md:h-auto">
-                            <img
+                            <Image
                                 src={imageSrc}
                                 alt={packageInfo.title}
-                                className="w-full h-full object-cover"
+                                fill
+                                className="object-cover"
                             />
                             <div className="absolute top-4 left-4 bg-gray-800/80 backdrop-blur-sm text-white text-sm font-semibold px-4 py-2 rounded-full shadow-lg">
                                 {packageInfo.route}
