@@ -2,58 +2,25 @@ import PackageCard from '../components/PackageCard'
 import Carousel from '../components/Carousel'
 import Navbar from '../components/Navbar'
 
-export default function Home() {
-    const packages = [
-        {
-            id: 1,
-            title: 'Premium Hajj Package',
-            month: 'June',
-            date: '15',
-            year: 2026,
-            amount: 725000,
-            route: 'Raipur to Mumbai',
-            features: [
-                '5-Star Hotel Accommodation',
-                'Direct Flights',
-                'Guided Tours',
-                'Meals Included',
-                'Visa Processing'
-            ]
-        },
-        {
-            id: 2,
-            title: 'Deluxe Umrah Package',
-            month: 'January',
-            date: '10',
-            year: 2026,
-            amount: 85000,
-            route: 'Raipur to Mumbai',
-            features: [
-                '4-Star Hotel Near Haram',
-                'Round Trip Flights',
-                'Transportation',
-                'Breakfast Included',
-                'Visa Assistance'
-            ]
-        },
-        {
-            id: 3,
-            title: 'Economy Umrah Package',
-            month: 'March',
-            date: '5',
-            year: 2026,
-            amount: 65000,
-            route: 'Raipur to Mumbai',
-            features: [
-                '3-Star Hotel',
-                'Economy Flights',
-                'Ground Transport',
-                'Group Tour',
-                'Visa Support'
-            ]
-        },
+async function getTours() {
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/admin/api/tour`, {
+            cache: 'no-store' // Ensures fresh data on each request
+        })
 
-    ]
+        if (!res.ok) {
+            throw new Error('Failed to fetch tours')
+        }
+
+        return await res.json()
+    } catch (error) {
+        console.error('Error fetching tours:', error)
+        return []
+    }
+}
+
+export default async function Home() {
+    const packages = await getTours()
 
     return (
         <main className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50">
@@ -78,11 +45,19 @@ export default function Home() {
                 </div>
 
                 {/* Package Cards Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {packages.map((pkg) => (
-                        <PackageCard key={pkg.id} package={pkg} />
-                    ))}
-                </div>
+                {packages.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {packages.map((pkg) => (
+                            <PackageCard key={pkg.id} package={pkg} />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-16">
+                        <div className="text-6xl mb-4">📦</div>
+                        <h3 className="text-2xl font-semibold text-gray-700 mb-2">No Packages Available</h3>
+                        <p className="text-gray-500">Tour packages will appear here once they are created.</p>
+                    </div>
+                )}
             </div>
 
             {/* Footer */}

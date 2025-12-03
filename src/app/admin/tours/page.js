@@ -54,14 +54,25 @@ export default async function AdminToursPage() {
 
     return (
         <div className="min-h-screen bg-gray-50 p-8 flex flex-col items-center">
+            <div className="absolute top-0 right-0 mt-2 mr-2">
+                <Link href="/admin/tours/create">
+                    <button className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-2 px-4 rounded shadow hover:from-blue-600 hover:to-indigo-700 transition-all duration-200">
+                        Create Package
+                    </button>
+                </Link>
+            </div>
             <div className="w-full max-w-lg">
                 <h1 className="text-3xl font-extrabold text-gray-900 mb-2 tracking-tight">Packages</h1>
+                
                 <p className="mb-8 text-base text-gray-500">List of tour packages — tap a row action to open details.</p>
                 <div className="flex flex-col gap-6">
+                    
                     {packages.map((pkg) => (
                         <div key={pkg.id} className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                            
                             <div className="mb-5">
                                 <span className="text-xs font-medium text-gray-400">Package Name</span>
+                                
                                 <h2 className="text-xl font-bold text-gray-800 mt-1">{pkg.name}</h2>
                             </div>
                             <div className="mb-3">
