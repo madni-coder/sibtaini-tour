@@ -20,8 +20,8 @@ export default function Navbar() {
                         <Link href="/" className="text-white hover:bg-amber-800 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300">
                             Home
                         </Link>
-                        <Link href="/gallery" className="text-white hover:bg-amber-800 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300">
-                            Gallery
+                        <Link href="/journey" className="text-white hover:bg-amber-800 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300">
+                            Our Journey
                         </Link>
                         <Link href="/umrah" className="text-white hover:bg-amber-800 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300">
                             Umrah
@@ -65,11 +65,11 @@ export default function Navbar() {
                             Home
                         </Link>
                         <Link
-                            href="/gallery"
+                            href="/journey"
                             className="block text-white hover:bg-amber-800 active:bg-amber-800 px-4 py-2 rounded-md text-base font-medium transition-all duration-300 transform hover:translate-x-2"
                             onClick={() => setIsOpen(false)}
                         >
-                            Gallery
+                            Our Journey
                         </Link>
                         <Link
                             href="/umrah"
