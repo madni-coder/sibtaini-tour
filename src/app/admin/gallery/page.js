@@ -2,6 +2,8 @@
 
 import { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
+import { HiUpload, HiCloudUpload, HiX } from 'react-icons/hi'
+import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 
 export default function Page() {
     const inputRef = useRef(null)
@@ -188,9 +190,7 @@ export default function Page() {
                             </div>
                         ) : (
                             <div className="text-center px-6">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16V4m0 0L3 8m4-4 4 4M17 8v12m0 0l4-4m-4 4-4-4" />
-                                </svg>
+                                <HiCloudUpload className="mx-auto h-16 w-16 text-gray-400" />
                                 <p className="mt-3 text-sm text-gray-600">Click the button to upload an image</p>
                                 <p className="mt-1 text-xs text-gray-400">Will display responsively on mobile and web</p>
 
@@ -199,9 +199,7 @@ export default function Page() {
                                         onClick={() => inputRef.current?.click()}
                                         className="inline-flex items-center gap-2 px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow focus:outline-none"
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M12 12v8m0-8l3 3m-3-3-3 3M12 3v9" />
-                                        </svg>
+                                        <HiUpload className="h-5 w-5" />
                                         Upload Image
                                     </button>
                                 </div>
@@ -237,13 +235,9 @@ export default function Page() {
                                     title="Delete image"
                                 >
                                     {deletingId === item.id ? (
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 animate-spin text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v4m0 8v4M4 12h4m8 0h4" />
-                                        </svg>
+                                        <AiOutlineLoading3Quarters className="h-4 w-4 animate-spin text-red-600" />
                                     ) : (
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
+                                        <HiX className="h-4 w-4 text-red-600" />
                                     )}
                                 </button>
                             </div>

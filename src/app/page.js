@@ -1,10 +1,17 @@
 import PackageCard from '../components/PackageCard'
 import Carousel from '../components/Carousel'
 import Navbar from '../components/Navbar'
+import { headers } from 'next/headers'
 
 async function getTours() {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/admin/api/tour`, {
+        // Get the host from request headers to support both localhost and network access
+        const headersList = headers()
+        const host = headersList.get('host') || 'localhost:3000'
+        const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http'
+        const baseUrl = `${protocol}://${host}`
+
+        const res = await fetch(`${baseUrl}/admin/api/tour`, {
             cache: 'no-store' // Ensures fresh data on each request
         })
 

@@ -1,6 +1,7 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
+import { HiPencil, HiPhotograph } from 'react-icons/hi'
 
 export default function EditTourPage() {
     const [imagePreviews, setImagePreviews] = useState([])
@@ -162,9 +163,7 @@ export default function EditTourPage() {
                             className="absolute top-3 right-3 bg-white hover:bg-gray-50 text-gray-700 rounded-full p-2.5 shadow-lg transition-colors border border-gray-200"
                             aria-label="Edit image"
                         >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                            </svg>
+                            <HiPencil className="w-5 h-5" />
                         </button>
                         <p className="text-xs text-gray-500 mt-2">{imagePreviews[0].name}</p>
                     </div>
@@ -176,9 +175,7 @@ export default function EditTourPage() {
                                 onClick={() => document.getElementById('images').click()}
                                 className="flex flex-col items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors"
                             >
-                                <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
+                                <HiPhotograph className="w-12 h-12" />
                                 <span className="text-sm font-medium">Click to select image</span>
                             </button>
                         </div>
