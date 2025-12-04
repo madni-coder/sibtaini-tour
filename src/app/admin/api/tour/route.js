@@ -1,16 +1,31 @@
 import { NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import path from 'path';
+import { getServiceSupabase } from '@/lib/supabase';
 
-// Simple in-memory store for created tours (replace with DB in production)
-let tours = [];
-
-// GET: return all tours (useful for quick testing)
+// GET: return all tours from database
 export async function GET() {
-    return NextResponse.json(tours);
+    try {
+        const supabase = getServiceSupabase();
+        const { data: tours, error } = await supabase
+            .from('tours')
+            .select('*')
+            .order('createdAt', { ascending: false });
+
+        if (error) throw error;
+
+        // Convert price strings to numbers
+        const serializedTours = tours.map(tour => ({
+            ...tour,
+            price: parseFloat(tour.price)
+        }));
+
+        return NextResponse.json(serializedTours);
+    } catch (error) {
+        console.error('Error fetching tours:', error);
+        return NextResponse.json({ error: 'Failed to fetch tours' }, { status: 500 });
+    }
 }
 
-// POST: accept form data (including multiple images) and save images to public/cardPics
+// POST: accept form data, upload image to cardPics bucket, and create tour
 export async function POST(request) {
     try {
         const formData = await request.formData();
@@ -22,42 +37,67 @@ export async function POST(request) {
         const from = formData.get('from')?.toString() || formData.get('location')?.toString() || '';
         const to = formData.get('to')?.toString() || '';
         const description = formData.get('description')?.toString() || '';
+        const imageFile = formData.get('image'); // Get image file from form data
 
-        // Handle multiple images (form field name should be 'images')
-        const images = typeof formData.getAll === 'function' ? formData.getAll('images') : [];
-        const savedImages = [];
+        const supabase = getServiceSupabase();
 
-        const dirPath = path.join(process.cwd(), 'public', 'cardPics');
-        await mkdir(dirPath, { recursive: true });
+        let imageUrl = '';
 
-        for (const file of images) {
-            if (!file || typeof file === 'string') continue;
-            const buffer = Buffer.from(await file.arrayBuffer());
-            const safeName = file.name.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_\.-]/g, '');
-            const fileName = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}_${safeName}`;
-            const filePath = path.join(dirPath, fileName);
-            await writeFile(filePath, buffer);
-            // Public path served from project root; files in `public/cardPics` are available at `/cardPics/...`
-            savedImages.push(`/cardPics/${fileName}`);
+        // Upload image to cardPics bucket if provided
+        if (imageFile && imageFile instanceof File) {
+            const buffer = await imageFile.arrayBuffer();
+            const safeName = imageFile.name.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_\.-]/g, '');
+            const fileName = `tours/${Date.now()}_${Math.random().toString(36).slice(2, 8)}_${safeName}`;
+
+            // Upload to Supabase Storage
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('cardPics')
+                .upload(fileName, buffer, {
+                    contentType: imageFile.type,
+                    cacheControl: '3600',
+                    upsert: false
+                });
+
+            if (uploadError) {
+                console.error('Image upload error:', uploadError);
+                throw new Error('Failed to upload image');
+            }
+
+            // Get public URL
+            const { data: { publicUrl } } = supabase.storage
+                .from('cardPics')
+                .getPublicUrl(fileName);
+
+            imageUrl = publicUrl;
         }
 
-        const tour = {
-            id: Date.now(),
-            name,
-            startDate,
-            endDate,
-            price,
-            from,
-            to,
-            description,
-            images: savedImages,
-            createdAt: new Date().toISOString(),
+        // Save tour to database using Supabase
+        const { data: tour, error } = await supabase
+            .from('tours')
+            .insert({
+                name,
+                startDate: new Date(startDate).toISOString(),
+                endDate: new Date(endDate).toISOString(),
+                price: parseFloat(price) || 0,
+                from,
+                to,
+                description,
+                images: imageUrl ? [imageUrl] : [],
+            })
+            .select()
+            .single();
+
+        if (error) throw error;
+
+        // Convert price to number for JSON response
+        const serializedTour = {
+            ...tour,
+            price: parseFloat(tour.price)
         };
 
-        tours.push(tour);
-
-        return NextResponse.json(tour, { status: 201 });
+        return NextResponse.json(serializedTour, { status: 201 });
     } catch (error) {
-        return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
+        console.error('Error creating tour:', error);
+        return NextResponse.json({ error: error.message || 'Invalid request' }, { status: 400 });
     }
 }

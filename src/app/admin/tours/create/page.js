@@ -91,11 +91,17 @@ export default function CreateTourPage() {
                 setStatusMessage('')
                 try {
                     const fd = new FormData(formRef.current)
-                    // append selected files (input may be outside the form)
-                    selectedFiles.forEach(f => fd.append('images', f))
+
+                    // Add image file to form data if selected
+                    if (selectedFiles.length > 0) {
+                        fd.append('image', selectedFiles[0]) // Send first image file to tour API
+                    }
 
                     const res = await fetch('/admin/api/tour', { method: 'POST', body: fd })
-                    if (!res.ok) throw new Error('Server error')
+                    if (!res.ok) {
+                        const errorData = await res.json()
+                        throw new Error(errorData.error || 'Server error')
+                    }
                     const data = await res.json()
                     setStatusMessage('Created successfully')
                     // reset form
@@ -103,7 +109,7 @@ export default function CreateTourPage() {
                     setImagePreviews([])
                     setSelectedFiles([])
                 } catch (err) {
-                    setStatusMessage('Failed to create package')
+                    setStatusMessage(err.message || 'Failed to create package')
                 } finally {
                     setIsSubmitting(false)
                 }
