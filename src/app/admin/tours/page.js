@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { FiEdit2, FiTrash2 } from 'react-icons/fi'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 
 function formatDate(dateStr) {
@@ -27,24 +27,39 @@ export default function AdminToursPage() {
     const [deletingId, setDeletingId] = useState(null)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [tourToDelete, setTourToDelete] = useState(null)
+    const hasFetched = useRef(false)
 
     useEffect(() => {
-        fetchPackages()
+        // Prevent duplicate fetches in Strict Mode
+        if (hasFetched.current) return
+        hasFetched.current = true
+
+        async function loadPackages() {
+            try {
+                setIsLoading(true)
+                const res = await fetch('/admin/api/tour', { cache: 'no-store' })
+                if (!res.ok) throw new Error('Failed to fetch tours')
+                const data = await res.json()
+                setPackages(data)
+            } catch (e) {
+                console.error('Error fetching tours:', e)
+                setPackages([])
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
+        loadPackages()
     }, [])
 
-    async function fetchPackages() {
+    async function refreshPackages() {
         try {
-            setIsLoading(true)
-            const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-            const res = await fetch(`${baseUrl}/admin/api/tour`, { cache: 'no-store' })
+            const res = await fetch('/admin/api/tour', { cache: 'no-store' })
             if (!res.ok) throw new Error('Failed to fetch tours')
             const data = await res.json()
             setPackages(data)
         } catch (e) {
             console.error('Error fetching tours:', e)
-            setPackages([])
-        } finally {
-            setIsLoading(false)
         }
     }
 
@@ -74,7 +89,7 @@ export default function AdminToursPage() {
             }
 
             // Refresh the list
-            await fetchPackages()
+            await refreshPackages()
         } catch (error) {
             console.error('Error deleting tour:', error)
         } finally {

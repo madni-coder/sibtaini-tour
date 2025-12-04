@@ -1,6 +1,7 @@
 "use client"
 
 import Link from 'next/link'
+import { HiViewGrid, HiPhotograph, HiUserGroup, HiPlusCircle } from 'react-icons/hi'
 
 export default function AdminSidebar({ open, onClose }) {
     return (
@@ -16,37 +17,29 @@ export default function AdminSidebar({ open, onClose }) {
                 <nav className="p-4">
                     <ul className="space-y-2">
                         <li>
-                            <Link href="/admin" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-700">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7h18M3 12h18M3 17h18" />
-                                </svg>
+                            <Link href="/admin" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-700" onClick={onClose}>
+                                <HiViewGrid className="h-5 w-5" />
                                 Dashboard
                             </Link>
                         </li>
 
                         <li>
-                            <Link href="/admin/gallery" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-700">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7M8 11l2 2 3-3 4 4" />
-                                </svg>
+                            <Link href="/admin/gallery" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-700" onClick={onClose}>
+                                <HiPhotograph className="h-5 w-5" />
                                 Gallery
                             </Link>
                         </li>
 
                         <li>
-                            <Link href="/admin/tours" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-700">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c1.657 0 3-1.343 3-3S13.657 2 12 2 9 3.343 9 5s1.343 3 3 3zM6 20v-2a4 4 0 014-4h4a4 4 0 014 4v2" />
-                                </svg>
+                            <Link href="/admin/tours" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-700" onClick={onClose}>
+                                <HiUserGroup className="h-5 w-5" />
                                 Tours
                             </Link>
                         </li>
 
                         <li>
-                            <Link href="/admin/tours/create" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-700">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-                                </svg>
+                            <Link href="/admin/tours/create" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-700" onClick={onClose}>
+                                <HiPlusCircle className="h-5 w-5" />
                                 Create Tour
                             </Link>
                         </li>
