@@ -1,9 +1,17 @@
 "use client"
 
 import Link from 'next/link'
-import { HiViewGrid, HiPhotograph, HiUserGroup, HiPlusCircle } from 'react-icons/hi'
+import { useRouter } from 'next/navigation'
+import { HiViewGrid, HiPhotograph, HiUserGroup, HiPlusCircle, HiLogout } from 'react-icons/hi'
 
 export default function AdminSidebar({ open, onClose }) {
+    const router = useRouter()
+
+    const handleLogout = () => {
+        localStorage.removeItem('adminAuth')
+        localStorage.removeItem('adminEmail')
+        router.push('/admin/login')
+    }
     return (
         <>
             {/* overlay for mobile when sidebar is open */}
@@ -37,18 +45,19 @@ export default function AdminSidebar({ open, onClose }) {
                             </Link>
                         </li>
 
-                        <li>
-                            <Link href="/admin/tours/create" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-700" onClick={onClose}>
-                                <HiPlusCircle className="h-5 w-5" />
-                                Create Tour
-                            </Link>
-                        </li>
+
 
                     </ul>
                 </nav>
 
                 <div className="mt-auto p-4 border-t border-gray-700">
-                    <button className="w-full text-left text-sm text-gray-300 hover:text-white">Sign out</button>
+                    <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded text-sm text-gray-300 hover:text-white hover:bg-gray-700"
+                    >
+                        <HiLogout className="h-5 w-5" />
+                        Sign out
+                    </button>
                 </div>
             </aside>
         </>

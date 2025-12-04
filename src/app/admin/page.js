@@ -1,12 +1,21 @@
-export default function AdminPage() {
-    return (
-        <div className="space-y-6">
-            <h2 className="text-2xl font-semibold">Dashboard</h2>
+"use client"
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="p-4 bg-white rounded shadow">Total Tours: <strong>12</strong></div>
-                <div className="p-4 bg-white rounded shadow">Gallery Items: <strong>24</strong></div>
-                <div className="p-4 bg-white rounded shadow">Pending Requests: <strong>3</strong></div>
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+
+export default function AdminPage() {
+    const router = useRouter()
+
+    useEffect(() => {
+        // Redirect to dashboard
+        router.push('/admin/dashboard')
+    }, [router])
+
+    return (
+        <div className="flex items-center justify-center min-h-[50vh]">
+            <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto"></div>
+                <p className="mt-4 text-gray-600">Redirecting...</p>
             </div>
         </div>
     )
