@@ -1,9 +1,11 @@
 
 'use client'
 import { useState, useRef } from 'react'
-import { HiPhotograph, HiX } from 'react-icons/hi'
+import { HiPhotograph, HiX, HiArrowLeft } from 'react-icons/hi'
+import { useRouter } from 'next/navigation'
 
 export default function CreateTourPage() {
+    const router = useRouter()
     const [imagePreviews, setImagePreviews] = useState([])
     const [selectedFiles, setSelectedFiles] = useState([])
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -30,8 +32,15 @@ export default function CreateTourPage() {
 
     return (
         <div className="min-h-screen bg-gray-50 p-6 sm:p-8">
+            <button
+                type="button"
+                onClick={() => router.push('/admin/tours')}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors mb-6 shadow-sm"
+            >
+                <HiArrowLeft className="w-5 h-5" />
+                <span>Back</span>
+            </button>
             <h1 className="text-2xl font-bold mb-1">Create Tour Package</h1>
-            <p className="text-sm text-gray-500 mb-6">This page is server-rendered for build-time prerendering. Use the admin UI to add packages.</p>
 
             <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Images</label>
@@ -160,6 +169,62 @@ export default function CreateTourPage() {
                     <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
                     <textarea id="description" name="description" rows="4" placeholder="Short summary of the package, highlights, and inclusions"
                         className="mt-2 block w-full rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400"></textarea>
+                </div>
+
+                {/* Facilities & Amenities Section */}
+                <div className="border-t pt-6">
+                    <h2 className="text-xl font-semibold text-gray-800 mb-4">Package Facilities & Amenities</h2>
+                    <p className="text-sm text-gray-600 mb-6">Add descriptions for the amenities included in this package</p>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label htmlFor="hotelAccommodation" className="block text-sm font-medium text-gray-700">🏨 Hotel Accommodation</label>
+                            <input id="hotelAccommodation" name="hotelAccommodation" placeholder="e.g., Comfortable stay near the holy sites"
+                                className="mt-2 block w-full rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                        </div>
+
+                        <div>
+                            <label htmlFor="roundTripFlights" className="block text-sm font-medium text-gray-700">✈️ Round Trip Flights</label>
+                            <input id="roundTripFlights" name="roundTripFlights" placeholder="e.g., Air travel arrangements included"
+                                className="mt-2 block w-full rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                        </div>
+
+                        <div>
+                            <label htmlFor="transportation" className="block text-sm font-medium text-gray-700">🚌 Transportation</label>
+                            <input id="transportation" name="transportation" placeholder="e.g., Ground transport for all transfers"
+                                className="mt-2 block w-full rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                        </div>
+
+                        <div>
+                            <label htmlFor="meals" className="block text-sm font-medium text-gray-700">🍽️ Meals</label>
+                            <input id="meals" name="meals" placeholder="e.g., Daily meals during the journey"
+                                className="mt-2 block w-full rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                        </div>
+
+                        <div>
+                            <label htmlFor="visaAssistance" className="block text-sm font-medium text-gray-700">📋 Visa Assistance</label>
+                            <input id="visaAssistance" name="visaAssistance" placeholder="e.g., Complete visa application support"
+                                className="mt-2 block w-full rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                        </div>
+
+                        <div>
+                            <label htmlFor="expertGuides" className="block text-sm font-medium text-gray-700">👨‍🏫 Expert Guides</label>
+                            <input id="expertGuides" name="expertGuides" placeholder="e.g., Knowledgeable guides throughout the journey"
+                                className="mt-2 block w-full rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                        </div>
+
+                        <div>
+                            <label htmlFor="supportServices" className="block text-sm font-medium text-gray-700">🏥 Support Services</label>
+                            <input id="supportServices" name="supportServices" placeholder="e.g., Assistance and support during travel"
+                                className="mt-2 block w-full rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                        </div>
+
+                        <div>
+                            <label htmlFor="contact24_7" className="block text-sm font-medium text-gray-700">📱 24/7 Contact</label>
+                            <input id="contact24_7" name="contact24_7" placeholder="e.g., Round-the-clock customer support"
+                                className="mt-2 block w-full rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                        </div>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">

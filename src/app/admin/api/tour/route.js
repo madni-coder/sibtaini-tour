@@ -39,6 +39,16 @@ export async function POST(request) {
         const description = formData.get('description')?.toString() || '';
         const imageFile = formData.get('image'); // Get image file from form data
 
+        // Facilities and amenities
+        const hotelAccommodation = formData.get('hotelAccommodation')?.toString() || '';
+        const roundTripFlights = formData.get('roundTripFlights')?.toString() || '';
+        const transportation = formData.get('transportation')?.toString() || '';
+        const meals = formData.get('meals')?.toString() || '';
+        const visaAssistance = formData.get('visaAssistance')?.toString() || '';
+        const expertGuides = formData.get('expertGuides')?.toString() || '';
+        const supportServices = formData.get('supportServices')?.toString() || '';
+        const contact24_7 = formData.get('contact24_7')?.toString() || '';
+
         const supabase = getServiceSupabase();
 
         let imageUrl = '';
@@ -83,6 +93,14 @@ export async function POST(request) {
                 to,
                 description,
                 images: imageUrl ? [imageUrl] : [],
+                hotelAccommodation,
+                roundTripFlights,
+                transportation,
+                meals,
+                visaAssistance,
+                expertGuides,
+                supportServices,
+                contact24_7,
             })
             .select()
             .single();
@@ -120,6 +138,16 @@ export async function PATCH(request) {
         const to = formData.get('to')?.toString() || '';
         const description = formData.get('description')?.toString() || '';
         const imageFile = formData.get('image'); // Get new image file if provided
+
+        // Facilities and amenities
+        const hotelAccommodation = formData.get('hotelAccommodation')?.toString() || '';
+        const roundTripFlights = formData.get('roundTripFlights')?.toString() || '';
+        const transportation = formData.get('transportation')?.toString() || '';
+        const meals = formData.get('meals')?.toString() || '';
+        const visaAssistance = formData.get('visaAssistance')?.toString() || '';
+        const expertGuides = formData.get('expertGuides')?.toString() || '';
+        const supportServices = formData.get('supportServices')?.toString() || '';
+        const contact24_7 = formData.get('contact24_7')?.toString() || '';
 
         const supabase = getServiceSupabase();
 
@@ -185,6 +213,14 @@ export async function PATCH(request) {
                 to,
                 description,
                 images: imageUrl ? [imageUrl] : [],
+                hotelAccommodation,
+                roundTripFlights,
+                transportation,
+                meals,
+                visaAssistance,
+                expertGuides,
+                supportServices,
+                contact24_7,
             })
             .eq('id', id)
             .select()
