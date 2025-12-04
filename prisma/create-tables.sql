@@ -12,6 +12,13 @@ CREATE TABLE IF NOT EXISTS tours (
   "to" VARCHAR(255),
   description TEXT,
   images TEXT[] DEFAULT '{}',
+  "hotelAccommodation" VARCHAR(255),
+  "roundTripFlights" VARCHAR(255),
+  transportation VARCHAR(255),
+  meals VARCHAR(255),
+  "visaAssistance" VARCHAR(255),
+  "expertGuides" VARCHAR(255),
+  "supportServices" VARCHAR(255),
   "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

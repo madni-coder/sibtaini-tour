@@ -73,7 +73,7 @@ export default function AdminLayout({ children }) {
                             <HiMenuAlt3 className="h-6 w-6" />
                         </button>
 
-                        <h1 className="text-lg font-medium">Admin Panel</h1>
+                        <h1 className="text-lg font-medium cursor-pointer hover:text-emerald-600 transition-colors" onClick={() => router.push('/admin')}>Admin Panel</h1>
                     </div>
 
                     <div className="flex items-center gap-4">
