@@ -23,12 +23,13 @@ export default function Carousel() {
         const setFromData = (data) => {
             if (cancelled) return
             setSlides(
-                data.map(item => ({
-                    id: item.id,
-                    // Remove '/public' from the imageUrl if present
-                    src: item.imageUrl.replace(/^\/public/, ''),
-                    alt: `Gallery Image ${item.id}`
-                }))
+                data
+                    .filter(item => item.images && item.images.length > 0)
+                    .map(item => ({
+                        id: item.id,
+                        src: item.images[0], // Use first image from tour
+                        alt: `${item.name || 'Tour'} - ${item.from || ''} to ${item.to || ''}`.trim()
+                    }))
             )
         }
 
@@ -39,7 +40,7 @@ export default function Carousel() {
         }
 
         // store promise so other mounts reuse it
-        galleryCache = fetch('/admin/api/gallery').then(res => res.json())
+        galleryCache = fetch('/admin/api/tour').then(res => res.json())
         galleryCache.then(setFromData).catch(() => { if (!cancelled) setSlides([]) })
 
         return () => { cancelled = true }

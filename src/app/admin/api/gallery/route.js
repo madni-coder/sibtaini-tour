@@ -1,56 +1,70 @@
 
 import { NextResponse } from 'next/server';
-import { writeFile, mkdir, readdir, stat } from 'fs/promises';
-import path from 'path';
+import { getServiceSupabase } from '@/lib/supabase';
 
-// Dummy in-memory gallery store
-let gallery = [];
-
-// GET: Return all gallery items
+// GET: Return all gallery items from database
 export async function GET() {
     try {
-        const dirPath = path.join(process.cwd(), 'public');
-        // Ensure directory exists (no error if it already exists)
-        await mkdir(dirPath, { recursive: true });
-        const files = await readdir(dirPath);
-        // Build items from files, include only files (not directories)
-        const items = await Promise.all(files.map(async (name) => {
-            const full = path.join(dirPath, name);
-            try {
-                const s = await stat(full);
-                if (!s.isFile()) return null;
-                return { id: s.mtimeMs || Date.now(), imageUrl: `/public/${name}` };
-            } catch (e) {
-                return null;
-            }
-        }));
-        const filtered = items.filter(Boolean).sort((a, b) => b.id - a.id);
-        return NextResponse.json(filtered);
-    } catch (err) {
-        return NextResponse.json([], { status: 200 });
+        const supabase = getServiceSupabase();
+        const { data: gallery, error } = await supabase
+            .from('gallery')
+            .select('*')
+            .order('createdAt', { ascending: false });
+
+        if (error) throw error;
+        return NextResponse.json(gallery);
+    } catch (error) {
+        console.error('Error fetching gallery:', error);
+        return NextResponse.json({ error: 'Failed to fetch gallery' }, { status: 500 });
     }
 }
 
-// POST: Add a new gallery item with uploaded image
+// POST: Add a new gallery item with uploaded image to Supabase Storage
 export async function POST(request) {
     try {
         const formData = await request.formData();
         const file = formData.get('image');
+
         if (!file || typeof file === 'string') {
             return NextResponse.json({ error: 'Image file is required' }, { status: 400 });
         }
+
+        const supabase = getServiceSupabase();
         const buffer = Buffer.from(await file.arrayBuffer());
-        const fileName = `${Date.now()}_${file.name}`;
-        const dirPath = path.join(process.cwd(), 'public');
-        // ensure directory exists
-        await mkdir(dirPath, { recursive: true });
-        const filePath = path.join(dirPath, fileName);
-        await writeFile(filePath, buffer);
-        const imageUrl = `/public/${fileName}`;
-        const newItem = { id: Date.now(), imageUrl };
-        gallery.push(newItem);
+        const safeName = file.name.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_\.-]/g, '');
+        const fileName = `gallery/${Date.now()}_${safeName}`;
+
+        // Upload to Supabase Storage
+        const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('cardPics')
+            .upload(fileName, buffer, {
+                contentType: file.type,
+                cacheControl: '3600',
+                upsert: false
+            });
+
+        if (uploadError) {
+            console.error('Error uploading image:', uploadError);
+            return NextResponse.json({ error: 'Failed to upload image' }, { status: 500 });
+        }
+
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage
+            .from('cardPics')
+            .getPublicUrl(fileName);
+
+        // Save to database using Supabase
+        const { data: newItem, error } = await supabase
+            .from('gallery')
+            .insert({ imageUrl: publicUrl })
+            .select()
+            .single();
+
+        if (error) throw error;
+
         return NextResponse.json(newItem, { status: 201 });
     } catch (error) {
+        console.error('Error creating gallery item:', error);
         return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
     }
 }
