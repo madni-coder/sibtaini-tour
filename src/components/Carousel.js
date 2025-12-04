@@ -22,15 +22,34 @@ export default function Carousel() {
 
         const setFromData = (data) => {
             if (cancelled) return
-            setSlides(
-                data
-                    .filter(item => item.images && item.images.length > 0)
-                    .map(item => ({
-                        id: item.id,
-                        src: item.images[0], // Use first image from tour
-                        alt: `${item.name || 'Tour'} - ${item.from || ''} to ${item.to || ''}`.trim()
-                    }))
-            )
+
+            // Normalize different payload shapes:
+            // - items with `images` array (tours)
+            // - items with `imageUrl` (gallery table rows)
+            const normalized = []
+            for (const item of (data || [])) {
+                // prefer images array if present
+                if (Array.isArray(item.images) && item.images.length > 0) {
+                    normalized.push({
+                        id: item.id ?? `${item.name || 'tour'}-${normalized.length}`,
+                        src: item.images[0],
+                        alt: `${item.name || 'Tour'}${item.from || item.to ? ` - ${item.from || ''} to ${item.to || ''}` : ''}`.trim()
+                    })
+                    continue
+                }
+
+                // fallback to single imageUrl (gallery rows)
+                const url = item.imageUrl || item.image_url || item.src || item.url
+                if (url) {
+                    normalized.push({
+                        id: item.id ?? `${url}-${normalized.length}`,
+                        src: url,
+                        alt: item.title || item.name || 'Gallery image'
+                    })
+                }
+            }
+
+            setSlides(normalized)
         }
 
         if (galleryCache) {
@@ -40,7 +59,7 @@ export default function Carousel() {
         }
 
         // store promise so other mounts reuse it
-        galleryCache = fetch('/admin/api/tour').then(res => res.json())
+        galleryCache = fetch('/admin/api/gallery').then(res => res.json())
         galleryCache.then(setFromData).catch(() => { if (!cancelled) setSlides([]) })
 
         return () => { cancelled = true }
