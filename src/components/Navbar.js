@@ -32,7 +32,7 @@ export default function Navbar() {
                         <Link href="/ziyarat" className="text-white hover:bg-amber-800 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300">
                             Ziyarat
                         </Link>
-                        <Link href="/contact" className="text-white hover:bg-amber-800 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300">
+                        <Link href="/contactUs" className="text-white hover:bg-amber-800 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300">
                             Contact Us
                         </Link>
                         <Link href="/about" className="text-white hover:bg-amber-800 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300">
@@ -85,27 +85,15 @@ export default function Navbar() {
                         >
                             Ramdan
                         </Link>
+                       
                         <Link
-                            href="/ziyarat"
-                            className="block text-white hover:bg-amber-800 active:bg-amber-800 px-4 py-2 rounded-md text-base font-medium transition-all duration-300 transform hover:translate-x-2"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            Ziyarat
-                        </Link>
-                        <Link
-                            href="/contact"
+                            href="/contactUs"
                             className="block text-white hover:bg-amber-800 active:bg-amber-800 px-4 py-2 rounded-md text-base font-medium transition-all duration-300 transform hover:translate-x-2"
                             onClick={() => setIsOpen(false)}
                         >
                             Contact Us
                         </Link>
-                        <Link
-                            href="/about"
-                            className="block text-white hover:bg-amber-800 active:bg-amber-800 px-4 py-2 rounded-md text-base font-medium transition-all duration-300 transform hover:translate-x-2"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            About Us
-                        </Link>
+                       
                     </div>
                 </div>
             </div>
