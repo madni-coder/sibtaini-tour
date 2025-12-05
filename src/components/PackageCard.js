@@ -37,8 +37,8 @@ export default function PackageCard({ package: pkg }) {
     const gradientClass = gradients[pkg.id % 3]
 
     // Use first image from API or fallback
-    const imageSrc = (pkg.images && pkg.images[0]) || `/cardPics/image${(pkg.id % 3) + 1}.jpg`
-
+    const imageSrc = (pkg.images && pkg.images[0])
+    console.log('hello ', imageSrc)
     // Build route string from 'from' and 'to' fields
     const route = pkg.from && pkg.to ? `${pkg.from} to ${pkg.to}` : (pkg.route || 'Tour Package')
 
@@ -56,6 +56,7 @@ export default function PackageCard({ package: pkg }) {
                     src={imageSrc}
                     alt={title}
                     fill
+                    unoptimized
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 {/* Location Badge Overlay */}

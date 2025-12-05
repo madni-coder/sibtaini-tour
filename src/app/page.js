@@ -1,9 +1,12 @@
+'use client'
+
 import PackageCard from '../components/PackageCard'
 import Carousel from '../components/Carousel'
 import Navbar from '../components/Navbar'
+import { useEffect, useState } from 'react'
 
 // Force dynamic rendering for this page
-export const dynamic = 'force-dynamic'
+// export const dynamic = 'force-dynamic'
 
 async function getTours() {
     try {
@@ -25,8 +28,12 @@ async function getTours() {
     }
 }
 
-export default async function Home() {
-    const packages = await getTours()
+export default function Home() {
+    const [packages, setPackages] = useState([]);
+
+    useEffect(() => {
+        (async () => setPackages(await getTours()))();
+    }, [])
 
     return (
         <main className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50">
