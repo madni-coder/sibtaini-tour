@@ -212,18 +212,6 @@ export default function CreateTourPage() {
                             <input id="expertGuides" name="expertGuides" placeholder="e.g., Knowledgeable guides throughout the journey"
                                 className="mt-2 block w-full rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400" />
                         </div>
-
-                        <div>
-                            <label htmlFor="supportServices" className="block text-sm font-medium text-gray-700">🏥 Support Services</label>
-                            <input id="supportServices" name="supportServices" placeholder="e.g., Assistance and support during travel"
-                                className="mt-2 block w-full rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400" />
-                        </div>
-
-                        <div>
-                            <label htmlFor="contact24_7" className="block text-sm font-medium text-gray-700">📱 24/7 Contact</label>
-                            <input id="contact24_7" name="contact24_7" placeholder="e.g., Round-the-clock customer support"
-                                className="mt-2 block w-full rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400" />
-                        </div>
                     </div>
                 </div>
 

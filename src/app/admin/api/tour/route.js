@@ -1,10 +1,53 @@
 import { NextResponse } from 'next/server';
 import { getServiceSupabase } from '@/lib/supabase';
 
-// GET: return all tours from database
-export async function GET() {
+// GET: return all tours from database or a single tour by ID
+export async function GET(request) {
     try {
+        const { searchParams } = new URL(request.url);
+        const id = searchParams.get('id');
+
         const supabase = getServiceSupabase();
+
+        // If ID is provided, return single tour with all data
+        if (id) {
+            const { data: tour, error } = await supabase
+                .from('tours')
+                .select('*')
+                .eq('id', id)
+                .single();
+
+            if (error) throw error;
+
+            if (!tour) {
+                return NextResponse.json({ error: 'Tour not found' }, { status: 404 });
+            }
+
+            // Return all tour data including facilities
+            const serializedTour = {
+                id: tour.id,
+                name: tour.name || '',
+                startDate: tour.startDate || '',
+                endDate: tour.endDate || '',
+                price: parseFloat(tour.price) || 0,
+                from: tour.from || '',
+                to: tour.to || '',
+                description: tour.description || '',
+                images: tour.images || [],
+                hotelAccommodation: tour.hotelAccommodation || '',
+                roundTripFlights: tour.roundTripFlights || '',
+                transportation: tour.transportation || '',
+                meals: tour.meals || '',
+                visaAssistance: tour.visaAssistance || '',
+                expertGuides: tour.expertGuides || '',
+                createdAt: tour.createdAt,
+                updatedAt: tour.updatedAt
+            };
+
+            return NextResponse.json(serializedTour);
+        }
+
+        // Otherwise, return all tours
         const { data: tours, error } = await supabase
             .from('tours')
             .select('*')
@@ -46,8 +89,6 @@ export async function POST(request) {
         const meals = formData.get('meals')?.toString() || '';
         const visaAssistance = formData.get('visaAssistance')?.toString() || '';
         const expertGuides = formData.get('expertGuides')?.toString() || '';
-        const supportServices = formData.get('supportServices')?.toString() || '';
-        const contact24_7 = formData.get('contact24_7')?.toString() || '';
 
         const supabase = getServiceSupabase();
 
@@ -99,8 +140,6 @@ export async function POST(request) {
                 meals,
                 visaAssistance,
                 expertGuides,
-                supportServices,
-                contact24_7,
             })
             .select()
             .single();
@@ -146,8 +185,6 @@ export async function PATCH(request) {
         const meals = formData.get('meals')?.toString() || '';
         const visaAssistance = formData.get('visaAssistance')?.toString() || '';
         const expertGuides = formData.get('expertGuides')?.toString() || '';
-        const supportServices = formData.get('supportServices')?.toString() || '';
-        const contact24_7 = formData.get('contact24_7')?.toString() || '';
 
         const supabase = getServiceSupabase();
 
@@ -219,8 +256,6 @@ export async function PATCH(request) {
                 meals,
                 visaAssistance,
                 expertGuides,
-                supportServices,
-                contact24_7,
             })
             .eq('id', id)
             .select()
