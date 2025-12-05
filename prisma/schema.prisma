@@ -44,3 +44,14 @@ model Gallery {
 
   @@map("gallery")
 }
+
+// Journey media model (images and videos)
+model Journey {
+  id        Int      @id @default(autoincrement())
+  mediaUrl  String
+  mediaType String   // 'image' or 'video'
+  fileName  String?
+  createdAt DateTime @default(now())
+
+  @@map("journey")
+}
