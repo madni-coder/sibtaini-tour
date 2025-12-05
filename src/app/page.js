@@ -1,15 +1,14 @@
 import PackageCard from '../components/PackageCard'
 import Carousel from '../components/Carousel'
 import Navbar from '../components/Navbar'
-import { headers } from 'next/headers'
+
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic'
 
 async function getTours() {
     try {
-        // Get the host from request headers to support both localhost and network access
-        const headersList = headers()
-        const host = headersList.get('host') || 'localhost:3000'
-        const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http'
-        const baseUrl = `${protocol}://${host}`
+        // Use absolute URL or relative path for API calls
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
 
         const res = await fetch(`${baseUrl}/admin/api/tour`, {
             cache: 'no-store' // Ensures fresh data on each request
@@ -76,7 +75,7 @@ export default async function Home() {
                         <p>📞 Contact: +91 93028 87855</p>
                         <p>📍 Location: Raipur, Chhattisgarh</p>
                     </div>
-                  
+
                 </div>
             </footer>
         </main>
