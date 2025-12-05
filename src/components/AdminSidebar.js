@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { HiViewGrid, HiPhotograph, HiUserGroup, HiPlusCircle, HiLogout } from 'react-icons/hi'
+import { HiViewGrid, HiPhotograph, HiUserGroup, HiPlusCircle, HiLogout, HiMap } from 'react-icons/hi'
 
 export default function AdminSidebar({ open, onClose }) {
     const router = useRouter()
@@ -45,6 +45,12 @@ export default function AdminSidebar({ open, onClose }) {
                             </Link>
                         </li>
 
+                        <li>
+                            <Link href="/admin/journey" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-700" onClick={onClose}>
+                                <HiMap className="h-5 w-5" />
+                                Journey
+                            </Link>
+                        </li>
 
 
                     </ul>
