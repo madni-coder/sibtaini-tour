@@ -73,13 +73,10 @@ export default async function Home() {
                     <h3 className="text-2xl font-bold mb-2">Sibtaini Tours & Travels</h3>
                     <p className="text-gray-300 mb-4">Making your spiritual journey memorable</p>
                     <div className="flex flex-col md:flex-row justify-center items-center gap-4 text-sm text-gray-400">
-                        <p>📞 Contact: +91 XXXX-XXXXXX</p>
-                        <p>📧 Email: info@sibtainitours.com</p>
+                        <p>📞 Contact: +91 93028 87855</p>
                         <p>📍 Location: Raipur, Chhattisgarh</p>
                     </div>
-                    <p className="text-gray-500 mt-4 text-xs">
-                        © 2025 Sibtaini Tours & Travels. All rights reserved.
-                    </p>
+                  
                 </div>
             </footer>
         </main>

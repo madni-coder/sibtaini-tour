@@ -13,9 +13,9 @@ async function getTour(id) {
         const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http'
         const baseUrl = `${protocol}://${host}`
 
-        console.log('Fetching tours from:', `${baseUrl}/admin/api/tour`)
+        console.log('Fetching tour details from:', `${baseUrl}/admin/api/tour?id=${id}`)
 
-        const res = await fetch(`${baseUrl}/admin/api/tour`, {
+        const res = await fetch(`${baseUrl}/admin/api/tour?id=${id}`, {
             cache: 'no-store'
         })
 
@@ -24,17 +24,10 @@ async function getTour(id) {
             return null
         }
 
-        const tours = await res.json()
-        console.log('Successfully fetched', tours.length, 'tours')
+        const tour = await res.json()
+        console.log('Successfully fetched tour:', tour.name)
 
-        // Convert string ID to number for comparison
-        const numericId = parseInt(id, 10)
-        console.log('Looking for tour with ID:', numericId)
-
-        const tour = tours.find(t => t.id === numericId)
-        console.log('Found tour:', tour ? tour.name : 'Not found')
-
-        return tour || null
+        return tour
     } catch (error) {
         console.error('Error fetching tour:', error)
         return null
@@ -61,17 +54,43 @@ function calculateDaysBetween(startDate, endDate) {
     return diffDays
 }
 
-// Default facilities for display
-const defaultFacilities = [
-    { icon: '🏨', title: 'Hotel Accommodation', description: 'Comfortable stay near the holy sites' },
-    { icon: '✈️', title: 'Round Trip Flights', description: 'Air travel arrangements included' },
-    { icon: '🚌', title: 'Transportation', description: 'Ground transport for all transfers' },
-    { icon: '🍽️', title: 'Meals', description: 'Daily meals during the journey' },
-    { icon: '📋', title: 'Visa Assistance', description: 'Complete visa application support' },
-    { icon: '👨‍🏫', title: 'Expert Guides', description: 'Knowledgeable guides throughout the journey' },
-    { icon: '🏥', title: 'Support Services', description: 'Assistance and support during travel' },
-    { icon: '📱', title: '24/7 Contact', description: 'Round-the-clock customer support' },
-]
+// Generate facilities from tour data
+function getFacilities(tour) {
+    const facilities = []
+
+    if (tour.hotelAccommodation) {
+        facilities.push({ icon: '🏨', title: 'Hotel', description: tour.hotelAccommodation })
+    }
+    if (tour.roundTripFlights) {
+        facilities.push({ icon: '✈️', title: 'Round Trip Flights', description: tour.roundTripFlights })
+    }
+    if (tour.transportation) {
+        facilities.push({ icon: '🚌', title: 'Transport', description: tour.transportation })
+    }
+    if (tour.meals) {
+        facilities.push({ icon: '🍽️', title: 'Meals', description: tour.meals })
+    }
+    if (tour.visaAssistance) {
+        facilities.push({ icon: '📋', title: 'Visa Assistance', description: tour.visaAssistance })
+    }
+    if (tour.expertGuides) {
+        facilities.push({ icon: '👨‍🏫', title: 'Expert Guides', description: tour.expertGuides })
+    }
+
+    // If no facilities are provided, return default ones
+    if (facilities.length === 0) {
+        return [
+            { icon: '🏨', title: 'Hotel', description: 'Comfortable stay near the holy sites' },
+            { icon: '✈️', title: 'Round Trip Flights', description: 'Air travel arrangements included' },
+            { icon: '🚌', title: 'Transportation', description: 'Ground transport for all transfers' },
+            { icon: '🍽️', title: 'Meals', description: 'Daily meals during the journey' },
+            { icon: '📋', title: 'Visa Assistance', description: 'Complete visa application support' },
+            { icon: '👨‍🏫', title: 'Expert Guides', description: 'Knowledgeable guides throughout the journey' },
+        ]
+    }
+
+    return facilities
+}
 
 export default async function PackageDetails({ params }) {
     const { id: tourId } = await params
@@ -86,6 +105,7 @@ export default async function PackageDetails({ params }) {
     const duration = calculateDaysBetween(tour.startDate, tour.endDate)
     const imageSrc = tour.images && tour.images.length > 0 ? tour.images[0] : '/cardPics/image1.jpg'
     const gradient = 'bg-gradient-to-br from-emerald-500 to-teal-600'
+    const facilities = getFacilities(tour)
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50">
@@ -159,17 +179,16 @@ export default async function PackageDetails({ params }) {
                     <p className="text-gray-600 text-center mb-10 max-w-2xl mx-auto">
                         Everything you need for a comfortable and spiritually fulfilling journey
                     </p>
-
                     {/* Facilities Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {defaultFacilities.map((facility, index) => (
+                    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                        {facilities.map((facility, index) => (
                             <div
                                 key={index}
-                                className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                                className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl p-4 md:p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
                             >
-                                <div className="text-4xl mb-3">{facility.icon}</div>
-                                <h3 className="text-lg font-bold text-gray-800 mb-2">{facility.title}</h3>
-                                <p className="text-sm text-gray-600">{facility.description}</p>
+                                <div className="text-3xl md:text-4xl mb-2 md:mb-3">{facility.icon}</div>
+                                <h3 className="text-sm md:text-lg font-bold text-gray-800 mb-1 md:mb-2 break-words">{facility.title}</h3>
+                                <p className="text-xs md:text-sm text-gray-600 break-words">{facility.description}</p>
                             </div>
                         ))}
                     </div>
@@ -195,14 +214,12 @@ export default async function PackageDetails({ params }) {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                         <button className="bg-white text-gray-800 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-                            📞 Call Now: +91 XXXX-XXXXXX
+                            📞 +91 93028 87855
                         </button>
                         <button className="bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-green-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
                             💬 WhatsApp Us
                         </button>
-                        <button className="bg-blue-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-                            ✉️ Email Inquiry
-                        </button>
+                        
                     </div>
                 </div>
             </div>
@@ -213,13 +230,10 @@ export default async function PackageDetails({ params }) {
                     <h3 className="text-2xl font-bold mb-2">Sibtaini Tours & Travels</h3>
                     <p className="text-gray-300 mb-4">Making your spiritual journey memorable</p>
                     <div className="flex flex-col md:flex-row justify-center items-center gap-4 text-sm text-gray-400">
-                        <p>📞 Contact: +91 XXXX-XXXXXX</p>
-                        <p>📧 Email: info@sibtainitours.com</p>
+                        <p>📞 Contact: +91 93028 87855</p>
                         <p>📍 Location: Raipur, Chhattisgarh</p>
                     </div>
-                    <p className="text-gray-500 mt-4 text-xs">
-                        © 2025 Sibtaini Tours & Travels. All rights reserved.
-                    </p>
+                   
                 </div>
             </footer>
         </div>
