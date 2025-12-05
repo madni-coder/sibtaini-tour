@@ -284,18 +284,18 @@ export default function JourneyPage() {
                                 )}
 
                                 {/* Media Preview */}
-                                <div className="aspect-video bg-gray-200 relative">
+                                <div className="bg-gray-200 relative">
                                     {file.type === 'image' ? (
                                         <img
                                             src={file.preview}
                                             alt={file.name}
-                                            className="w-full h-full object-cover"
+                                            className="w-full h-auto object-contain"
                                         />
                                     ) : (
-                                        <div className="relative w-full h-full">
+                                        <div className="relative w-full">
                                             <video
                                                 src={file.preview}
-                                                className="w-full h-full object-cover"
+                                                className="w-full h-auto object-contain"
                                                 controls
                                             />
                                             <div className="absolute top-2 left-2 bg-black/70 text-white px-2 py-1 rounded text-xs flex items-center gap-1">
@@ -378,17 +378,17 @@ export default function JourneyPage() {
                                 </div>
 
                                 {/* Media Display */}
-                                <div className="aspect-video bg-gray-200 relative">
+                                <div className="bg-gray-200 relative">
                                     {item.mediaType === 'image' ? (
                                         <img
                                             src={item.mediaUrl}
                                             alt={item.fileName || 'Journey media'}
-                                            className="w-full h-full object-cover"
+                                            className="w-full h-auto object-contain"
                                         />
                                     ) : (
                                         <video
                                             src={item.mediaUrl}
-                                            className="w-full h-full object-cover"
+                                            className="w-full h-auto object-contain"
                                             controls
                                         />
                                     )}
