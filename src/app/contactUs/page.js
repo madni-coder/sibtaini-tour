@@ -167,7 +167,7 @@ export default function ContactUs() {
                     <p className="text-gray-300 text-lg mb-6">Making your spiritual journey memorable since 2014</p>
                     <div className="flex flex-col md:flex-row justify-center items-center gap-6 text-gray-400">
                         <p className="flex items-center gap-2"><FaPhone /> +91 93028 87855</p>
-                        <p className="flex items-center gap-2"><FaMapMarkerAlt /> Nawapara Rajim, Chhattisgarh</p>
+                        <p className="flex items-center gap-2"><FaMapMarkerAlt /> Baijnath Para,Raipur, Chhattisgarh</p>
                         <p className="flex items-center gap-2"><FaEnvelope /> info@sibtainitours.com</p>
                     </div>
                     <div className="mt-8 pt-8 border-t border-gray-700">

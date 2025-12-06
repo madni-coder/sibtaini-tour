@@ -73,19 +73,24 @@ function getFacilities(tour) {
     if (tour.visaAssistance) {
         facilities.push({ icon: '📋', title: 'Visa Assistance', description: tour.visaAssistance })
     }
-    if (tour.expertGuides) {
-        facilities.push({ icon: '👨‍🏫', title: 'Expert Guides', description: tour.expertGuides })
-    }
+    
+
+    // Add luxury features
+   
+    facilities.push({ icon: '💧', title: '5 Liter Zamzam', description: 'Holy Zamzam water included in package' })
+    facilities.push({ icon: '🎒', title: 'Side Bag', description: 'Complimentary travel bag for your journey' })
+    facilities.push({ icon: '🧺', title: 'Laundry Service', description: 'Professional laundry service available' })
+    facilities.push({ icon: '🚌', title: 'Local Ziyarat by Bus', description: 'Guided local religious site visits' })
 
     // If no facilities are provided, return default ones
     if (facilities.length === 0) {
         return [
             { icon: '🏨', title: 'Hotel', description: 'Comfortable stay near the holy sites' },
             { icon: '✈️', title: 'Round Trip Flights', description: 'Air travel arrangements included' },
-            { icon: '🚌', title: 'Transportation', description: 'Ground transport for all transfers' },
+            { icon: '🚌', title: 'Luxury Transport', description: 'Ground transport for all transfers' },
             { icon: '🍽️', title: 'Meals', description: 'Daily meals during the journey' },
             { icon: '📋', title: 'Visa Assistance', description: 'Complete visa application support' },
-            { icon: '👨‍🏫', title: 'Expert Guides', description: 'Knowledgeable guides throughout the journey' },
+          
         ]
     }
 
@@ -219,7 +224,7 @@ export default async function PackageDetails({ params }) {
                         <button className="bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-green-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
                             💬 WhatsApp Us
                         </button>
-                        
+
                     </div>
                 </div>
             </div>
@@ -233,7 +238,7 @@ export default async function PackageDetails({ params }) {
                         <p>📞 Contact: +91 93028 87855</p>
                         <p>📍 Location: Raipur, Chhattisgarh</p>
                     </div>
-                   
+
                 </div>
             </footer>
         </div>

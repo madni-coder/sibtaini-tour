@@ -3,37 +3,11 @@
 import PackageCard from '../components/PackageCard'
 import Carousel from '../components/Carousel'
 import Navbar from '../components/Navbar'
-import { useEffect, useState } from 'react'
-
-// Force dynamic rendering for this page
-// export const dynamic = 'force-dynamic'
-
-async function getTours() {
-    try {
-        // Use absolute URL or relative path for API calls
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-
-        const res = await fetch(`${baseUrl}/admin/api/tour`, {
-            cache: 'no-store' // Ensures fresh data on each request
-        })
-
-        if (!res.ok) {
-            throw new Error('Failed to fetch tours')
-        }
-
-        return await res.json()
-    } catch (error) {
-        console.error('Error fetching tours:', error)
-        return []
-    }
-}
+import { useTourContext } from '../context/tourContext'
 
 export default function Home() {
-    const [packages, setPackages] = useState([]);
+    const { tours: packages, loading, error } = useTourContext()
 
-    useEffect(() => {
-        (async () => setPackages(await getTours()))();
-    }, [])
 
     return (
         <main className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50">
@@ -58,7 +32,13 @@ export default function Home() {
                 </div>
 
                 {/* Package Cards Grid */}
-                {packages.length > 0 ? (
+                {loading ? (
+                    <div className="text-center py-16">
+                        <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mb-4"></div>
+                        <h3 className="text-2xl font-semibold text-gray-700 mb-2">Loading Packages...</h3>
+                        <p className="text-gray-500">Please wait while we fetch the latest tour packages.</p>
+                    </div>
+                ) : packages.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {packages.map((pkg) => (
                             <PackageCard key={pkg.id} package={pkg} />
